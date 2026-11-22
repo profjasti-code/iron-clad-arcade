@@ -108,7 +108,9 @@ const chartPositions = {
   "geo-block-the-pig": 52
 };
 const titleOrder = new Intl.Collator('en', {numeric:true, sensitivity:'base'});
+const pinnedGameId = 'geo-kour-io';
 games.sort((a,b) => {
+ if ((a.id === pinnedGameId) !== (b.id === pinnedGameId)) return a.id === pinnedGameId ? -1 : 1;
  const left = chartPositions[a.id] ?? Infinity;
  const right = chartPositions[b.id] ?? Infinity;
  return left === right ? titleOrder.compare(a.name,b.name) : left-right;
@@ -128,12 +130,12 @@ function card(g,home=false){
  const name=escapeText(g.name);
  const label=g.external?'Play on Poki':'Play';
  const art=g.image||'art/'+g.id+'-cover.webp';
- return `<article><button class="game" data-play="${g.id}" aria-label="${label} ${name}${g.external?' (opens in a new tab)':''}"><img loading="lazy" decoding="async" src="${art}" alt=""><strong>${name}${chartPositions[g.id] ? '' : ' <small>· Unranked</small>'}${g.external?' <small>· Poki ↗</small>':''}</strong></button>${home?'':`<button class="fav" aria-label="Favorite ${name}" aria-pressed="${star}" data-fav="${g.id}">${heart}</button>`}</article>`;
+ return `<article><button class="game" data-play="${g.id}" aria-label="${label} ${name}${g.external?' (opens in a new tab)':''}"><img loading="lazy" decoding="async" src="${art}" alt=""><strong>${name}${g.id === pinnedGameId ? ' <small>· Pinned</small>' : chartPositions[g.id] ? '' : ' <small>· Unranked</small>'}${g.external?' <small>· Poki ↗</small>':''}</strong></button>${home?'':`<button class="fav" aria-label="Favorite ${name}" aria-pressed="${star}" data-fav="${g.id}">${heart}</button>`}</article>`;
 }
 function catalog(){
  const q=get('query').value.trim().toLowerCase(),genre=get('genre').value;
  const list=games.filter(g=>(page!=='saved'||saved.has(g.id))&&(genre==='All genres'||(g.tags||[g.genre]).includes(genre))&&g.name.toLowerCase().includes(q));
- get('matches').textContent=list.length+' '+(list.length===1?'game':'games')+' · Poki and Coolmath chart picks first · Unranked games A–Z';
+ get('matches').textContent=list.length+' '+(list.length===1?'game':'games')+' · Poki and Coolmath chart order · Unranked games A–Z';
  get('grid').innerHTML=list.map(g=>card(g)).join('')||`<p>${page==='saved'&&!saved.size?'Choose a heart in All Games to save a favorite.':'No games match your search.'}</p>`;
 }
 function navigate(next){
