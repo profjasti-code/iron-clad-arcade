@@ -76,6 +76,43 @@ const pokiGames = [
   }
 ];
 const games = [...originals, ...pokiGames, ...guestGames.filter(g=>g.name!=='2048')];
+// Snapshot: November 22, 2026. Headline chart positions precede collection positions.
+// Each game's best placement across the two sites determines its order.
+// Sources: https://poki.com/en/popular and https://www.coolmathgames.com/
+// Additional titles: https://www.coolmathgames.com/1-mobile-site-most-popular-games
+const chartPositions = {
+  "2048": 32,
+  "poki-master-chess": 1,
+  "poki-minefun-io": 2,
+  "poki-aquaparkio": 4,
+  "poki-cryzen-io": 5,
+  "geo-drift-boss": 7,
+  "geo-retro-bowl": 8,
+  "geo-stickman-hook": 9,
+  "geo-monkey-mart": 10,
+  "poki-blocky-blast-puzzle": 11,
+  "poki-level-devil": 12,
+  "geo-drive-mad": 29,
+  "geo-basketball-stars": 32,
+  "geo-ragdoll-hit": 55,
+  "geo-speed-stars": 80,
+  "geo-blacktop-police-chase": 98,
+  "geo-run-3": 1,
+  "geo-tiny-fishing": 4,
+  "geo-cookie-clicker": 8,
+  "geo-moto-x3m": 10,
+  "geo-60-second-burger-run": 42,
+  "geo-parking-fury": 45,
+  "geo-moto-x3m-spooky-land": 46,
+  "geo-parking-fury-2": 47,
+  "geo-block-the-pig": 52
+};
+const titleOrder = new Intl.Collator('en', {numeric:true, sensitivity:'base'});
+games.sort((a,b) => {
+ const left = chartPositions[a.id] ?? Infinity;
+ const right = chartPositions[b.id] ?? Infinity;
+ return left === right ? titleOrder.compare(a.name,b.name) : left-right;
+});
 const genres=[...new Set(games.flatMap(g=>g.tags||[g.genre]))].sort();
 get('genre').replaceChildren(...['All genres',...genres].map(label=>new Option(label,label)));
 get('summary').textContent=games.length+' games to explore and play.';
@@ -91,12 +128,12 @@ function card(g,home=false){
  const name=escapeText(g.name);
  const label=g.external?'Play on Poki':'Play';
  const art=g.image||'art/'+g.id+'-cover.webp';
- return `<article><button class="game" data-play="${g.id}" aria-label="${label} ${name}${g.external?' (opens in a new tab)':''}"><img loading="lazy" decoding="async" src="${art}" alt=""><strong>${name}${g.external?' <small>· Poki ↗</small>':''}</strong></button>${home?'':`<button class="fav" aria-label="Favorite ${name}" aria-pressed="${star}" data-fav="${g.id}">${heart}</button>`}</article>`;
+ return `<article><button class="game" data-play="${g.id}" aria-label="${label} ${name}${g.external?' (opens in a new tab)':''}"><img loading="lazy" decoding="async" src="${art}" alt=""><strong>${name}${chartPositions[g.id] ? '' : ' <small>· Unranked</small>'}${g.external?' <small>· Poki ↗</small>':''}</strong></button>${home?'':`<button class="fav" aria-label="Favorite ${name}" aria-pressed="${star}" data-fav="${g.id}">${heart}</button>`}</article>`;
 }
 function catalog(){
  const q=get('query').value.trim().toLowerCase(),genre=get('genre').value;
  const list=games.filter(g=>(page!=='saved'||saved.has(g.id))&&(genre==='All genres'||(g.tags||[g.genre]).includes(genre))&&g.name.toLowerCase().includes(q));
- get('matches').textContent=list.length+' '+(list.length===1?'game':'games');
+ get('matches').textContent=list.length+' '+(list.length===1?'game':'games')+' · Poki and Coolmath chart picks first · Unranked games A–Z';
  get('grid').innerHTML=list.map(g=>card(g)).join('')||`<p>${page==='saved'&&!saved.size?'Choose a heart in All Games to save a favorite.':'No games match your search.'}</p>`;
 }
 function navigate(next){
