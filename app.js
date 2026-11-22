@@ -50,7 +50,7 @@ const heart='<svg aria-hidden="true" viewBox="0 0 24 24"><path d="M20.5 4.8c-2.7
 function read(key,fallback){try{return JSON.parse(localStorage.getItem(key))??fallback;}catch{return fallback;}}
 function save(key,value){try{localStorage.setItem(key,JSON.stringify(value));}catch{}}
 let saved=new Set(read('quartercade-favorites',[])),page='home';
-const prefs=read('quartercade-display',{dark:true,showClock:true,hours:false});
+const prefs=read('quartercade-display',{showClock:true,hours:false});
 function card(g,home=false){
  const star=saved.has(g.id);
  const name=escapeText(g.name);
@@ -70,11 +70,10 @@ function navigate(next){
  get('query').value='';get('genre').value='All genres';catalog();window.scrollTo(0,0);
 }
 function clock(){get('clock').hidden=!prefs.showClock;get('clock').textContent=new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit',hour12:!prefs.hours});}
-function display(){document.documentElement.dataset.theme=prefs.dark?'dark':'light';clock();}
-for(const key of ['dark','showClock','hours']){
- get(key).checked=prefs[key];get(key).onchange=()=>{prefs[key]=get(key).checked;save('quartercade-display',prefs);display();};
+for(const key of ['showClock','hours']){
+ get(key).checked=prefs[key];get(key).onchange=()=>{prefs[key]=get(key).checked;save('quartercade-display',prefs);clock();};
 }
-display();setInterval(clock,10000);
+clock();setInterval(clock,10000);
 get('query').oninput=catalog;get('genre').onchange=catalog;
 document.addEventListener('click',e=>{
  const b=e.target.closest('button');if(!b)return;
