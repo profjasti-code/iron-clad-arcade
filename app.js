@@ -7,7 +7,75 @@ const originals = [
   ['pacman','Pac-Man','Arcade','daleharvey/pacman','Press N to start and use the arrow keys to steer.']
 ].map(([id,name,genre,repo,controls])=>({id,name,genre,repo,controls}));
 const get=id=>document.getElementById(id);
-const games = [...originals, ...guestGames.filter(g=>g.name!=='2048')];
+const pokiGames = [
+  {
+    "id": "poki-level-devil",
+    "name": "Level Devil",
+    "url": "https://poki.com/en/g/level-devil",
+    "image": "https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=320,height=320,fit=cover,f=auto/701e10b108ed7a0c68c738c46c9a705a/level-devil-logo.png",
+    "tags": [
+      "Poki",
+      "Platformer"
+    ],
+    "external": true
+  },
+  {
+    "id": "poki-master-chess",
+    "name": "Master Chess",
+    "url": "https://poki.com/en/g/master-chess",
+    "image": "https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=320,height=320,fit=cover,f=auto/505695b9-1b21-47fd-a8e1-93345afb57de/master-chess-logo.png",
+    "tags": [
+      "Poki",
+      "Strategy"
+    ],
+    "external": true
+  },
+  {
+    "id": "poki-aquaparkio",
+    "name": "Aquapark.io",
+    "url": "https://poki.com/en/g/aquaparkio",
+    "image": "https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=320,height=320,fit=cover,f=auto/f7807dce7b12c7db10bee0e6f645732b/aquaparkio-logo.jfif",
+    "tags": [
+      "Poki",
+      "Racing"
+    ],
+    "external": true
+  },
+  {
+    "id": "poki-minefun-io",
+    "name": "MineFun.io",
+    "url": "https://poki.com/en/g/minefun-io",
+    "image": "https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=320,height=320,fit=cover,f=auto/32d8c732177e212fce653cceeecfb5ac/minefun-io-logo.png",
+    "tags": [
+      "Poki",
+      "Multiplayer"
+    ],
+    "external": true
+  },
+  {
+    "id": "poki-blocky-blast-puzzle",
+    "name": "Blocky Blast Puzzle",
+    "url": "https://poki.com/en/g/blocky-blast-puzzle",
+    "image": "https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=320,height=320,fit=cover,f=auto/291aaf2dcf5c1322558a9c038b3c5251/blocky-blast-puzzle-logo.png",
+    "tags": [
+      "Poki",
+      "Puzzle"
+    ],
+    "external": true
+  },
+  {
+    "id": "poki-cryzen-io",
+    "name": "Cryzen.io",
+    "url": "https://poki.com/en/g/cryzen-io",
+    "image": "https://img.poki-cdn.com/cdn-cgi/image/q=78,scq=50,width=320,height=320,fit=cover,f=auto/78b9b3f913a834fca35c2cc6423616af/cryzen-io-logo.jfif",
+    "tags": [
+      "Poki",
+      "Shooter"
+    ],
+    "external": true
+  }
+];
+const games = [...originals, ...pokiGames, ...guestGames.filter(g=>g.name!=='2048')];
 const genres=[...new Set(games.flatMap(g=>g.tags||[g.genre]))].sort();
 get('genre').replaceChildren(...['All genres',...genres].map(label=>new Option(label,label)));
 get('summary').textContent=games.length+' games to explore and play.';
@@ -21,8 +89,9 @@ const prefs=read('quartercade-display',{dark:true,showClock:true,hours:false});
 function card(g,home=false){
  const star=saved.has(g.id);
  const name=escapeText(g.name);
+ const label=g.external?'Play on Poki':'Play';
  const art=g.image||'art/'+g.id+'-cover.webp';
- return `<article><button class="game" data-play="${g.id}" aria-label="Play ${name}"><img loading="lazy" decoding="async" src="${art}" alt=""><strong>${name}</strong></button>${home?'':`<button class="fav" aria-label="Favorite ${name}" aria-pressed="${star}" data-fav="${g.id}">${heart}</button>`}</article>`;
+ return `<article><button class="game" data-play="${g.id}" aria-label="${label} ${name}${g.external?' (opens in a new tab)':''}"><img loading="lazy" decoding="async" src="${art}" alt=""><strong>${name}${g.external?' <small>· Poki ↗</small>':''}</strong></button>${home?'':`<button class="fav" aria-label="Favorite ${name}" aria-pressed="${star}" data-fav="${g.id}">${heart}</button>`}</article>`;
 }
 function catalog(){
  const q=get('query').value.trim().toLowerCase(),genre=get('genre').value;
@@ -47,6 +116,7 @@ document.addEventListener('click',e=>{
  const b=e.target.closest('button');if(!b)return;
  if(b.dataset.play){
   const g=games.find(g=>g.id===b.dataset.play);
+  if(g.external){window.open(g.url,'_blank','noopener,noreferrer');return;}
   get('title').textContent=g.name;get('control').textContent=g.controls||g.tags.join(' · ');get('frame').title=g.name+' game';
   const url=g.url||'games/'+g.id+'/index.html';
   get('openGame').href=url;
