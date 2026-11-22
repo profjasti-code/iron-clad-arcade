@@ -1,0 +1,2 @@
+Upstream: https://github.com/Hextris/hextris/tree/8872ec47d694628e2fe668ebaa90b13d5626d95f
+Arcade changes, November 2026: Removed remote analytics, score reporting, remote script and external font requests. Hid share controls.

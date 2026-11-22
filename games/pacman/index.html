@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>HTML5 Pacman</title>
+    
+    <style type="text/css">
+      @font-face {
+	    font-family: 'BDCartoonShoutRegular';
+        src: url('BD_Cartoon_Shout-webfont.ttf') format('truetype');
+	    font-weight: normal;
+	    font-style: normal;
+      }
+      #pacman {
+        height:450px;
+        width:342px;
+        margin:20px auto;
+      }
+      #shim { 
+        font-family: BDCartoonShoutRegular; 
+        position:absolute;
+        visibility:hidden
+      }
+      h1 { font-family: BDCartoonShoutRegular; text-align:center; }
+      body { width:342px; margin:0px auto; font-family:sans-serif; }
+      a { text-decoration:none; }
+    </style>
+
+<style>.pad{display:none;gap:.35rem;justify-content:center;flex-wrap:wrap;margin:.4rem auto}.pad button{min-width:44px;min-height:44px;border:0;border-radius:6px;background:#393947;color:white;font:600 16px system-ui;touch-action:manipulation}@media(pointer:coarse){.pad{display:flex}}</style><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{background:#000;color:white;width:100%;text-align:center}#pacman{width:min(94vw,65vh,420px);height:auto;margin:6px auto}</style></head>
+
+<body>
+  
+  <div id="shim">shim for font face</div>
+
+  <div id="pacman"></div>
+  <script src="pacman.js"></script>
+  <script src="modernizr-1.5.min.js"></script>
+
+  <script>
+
+    var el = document.getElementById("pacman");
+
+    if (Modernizr.canvas && Modernizr.localstorage && 
+        Modernizr.audio && (Modernizr.audio.ogg || Modernizr.audio.mp3)) {
+      window.setTimeout(function () { PACMAN.init(el, "./"); }, 0);
+    } else { 
+      el.innerHTML = "Sorry, needs a decent browser<br /><small>" + 
+        "(firefox 3.6+, Chrome 4+, Opera 10+ and Safari 4+)</small>";
+    }
+  </script>
+
+<nav class="pad" aria-label="Touch controls"><button aria-label="Start game" data-key="78">Start</button><button aria-label="Move left" data-key="37">◀</button><button aria-label="Move up" data-key="38">▲</button><button aria-label="Move down" data-key="40">▼</button><button aria-label="Move right" data-key="39">▶</button></nav><script>document.querySelectorAll(".pad button").forEach(function(button){button.addEventListener("click",function(){document.dispatchEvent(new KeyboardEvent("keydown",{bubbles:true,cancelable:true,keyCode:Number(button.dataset.key),which:Number(button.dataset.key)}));});});</script></body>
+</html>

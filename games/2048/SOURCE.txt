@@ -1,0 +1,2 @@
+Upstream: https://github.com/gabrielecirulli/2048/tree/478b6ec346e3787f589e4af751378d06ded4cbbc
+Arcade changes, November 2026: Adapted page spacing and introductory copy for embedded play.

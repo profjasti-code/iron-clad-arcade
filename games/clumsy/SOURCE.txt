@@ -1,0 +1,2 @@
+Upstream: https://github.com/ellisonleao/clumsy-bird/tree/fae3d487d5102af29fb3f78431cbd45e9b83aed3
+Arcade changes, November 2026: Loaded the original unminified game sources directly.

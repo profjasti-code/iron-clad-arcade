@@ -1,0 +1,2 @@
+Upstream: https://github.com/jakesgordon/javascript-tetris/tree/e5c0c42f7dac0f3514a55eff656c6e22e95d68ed
+Arcade changes, November 2026: Added touch controls and viewport handling.

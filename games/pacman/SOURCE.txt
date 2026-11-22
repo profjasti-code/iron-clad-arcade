@@ -1,0 +1,2 @@
+Upstream: https://github.com/daleharvey/pacman/tree/3acc5e2bb10e93c8f08eceb1562e1a16d672a1c6
+Arcade changes, November 2026: Added touch controls and responsive sizing. Audio preloading runs without blocking game startup.

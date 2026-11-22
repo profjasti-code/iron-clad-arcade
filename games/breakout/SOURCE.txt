@@ -1,0 +1,2 @@
+Upstream: https://github.com/jakesgordon/javascript-breakout/tree/eed59e2affa9423b93d2ac8ff93061bb88b33284
+Arcade changes, November 2026: Adapted game sizing and switched sound playback to HTML audio with local files.
