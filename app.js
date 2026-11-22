@@ -88,10 +88,8 @@ document.addEventListener('click',e=>{
  }else if(b.dataset.fav){
  const id=b.dataset.fav;saved.has(id)?saved.delete(id):saved.add(id);save('quartercade-favorites',[...saved]);catalog();document.querySelector('[data-fav="'+id+'"]')?.focus();
  }else if(b.dataset.page){if(b.dataset.page===page &&page==='saved')navigate('all');else navigate(b.dataset.page);}
- else if(b.id==='sources')get('credits').showModal();
  else if(b.classList.contains('close'))b.closest('dialog').close();
 });
 get('player').addEventListener('close',()=>get('frame').src='about:blank');
 get('frame').addEventListener('load',()=>{if(get('player').open){get('frame').focus();if(get('frame').contentDocument)get('frame').contentWindow.addEventListener('keydown',e=>{if(e.key==='Escape')get('player').close();});}});
-get('links').innerHTML='<a href="https://geodmeeeeee.github.io/chiknsandwitch/" target="_blank" rel="noopener">Chikin Sandwitch collection<small>Original catalog and hosted games</small></a>'+originals.map(g=>`<a href="https://github.com/${g.repo}" target="_blank" rel="noopener">${g.name}<small>github.com/${g.repo}</small></a>`).join('');
 navigate('home');
