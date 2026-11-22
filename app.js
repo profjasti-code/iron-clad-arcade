@@ -130,7 +130,7 @@ function card(g,home=false){
  const name=escapeText(g.name);
  const label=g.external?'Play on Poki':'Play';
  const art=g.image||'art/'+g.id+'-cover.webp';
- return `<article><button class="game" data-play="${g.id}" aria-label="${label} ${name}${g.external?' (opens in a new tab)':''}"><img loading="lazy" decoding="async" src="${art}" alt=""><strong>${name}${g.id === pinnedGameId ? ' <small>· Pinned</small>' : chartPositions[g.id] ? '' : ' <small>· Unranked</small>'}${g.external?' <small>· Poki ↗</small>':''}</strong></button>${home?'':`<button class="fav" aria-label="Favorite ${name}" aria-pressed="${star}" data-fav="${g.id}">${heart}</button>`}</article>`;
+ return `<article><button class="game" data-play="${g.id}" aria-label="${label} ${name}${g.external?' (opens in a new tab)':''}"><img loading="lazy" decoding="async" src="${art}" alt=""><strong>${name}${g.id === pinnedGameId || chartPositions[g.id] ? '' : ' <small>· Unranked</small>'}${g.external?' <small>· Poki ↗</small>':''}</strong></button>${home?'':`<button class="fav" aria-label="Favorite ${name}" aria-pressed="${star}" data-fav="${g.id}">${heart}</button>`}</article>`;
 }
 function catalog(){
  const q=get('query').value.trim().toLowerCase(),genre=get('genre').value;
